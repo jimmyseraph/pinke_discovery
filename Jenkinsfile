@@ -1,10 +1,5 @@
 pipeline {
-	agent {
-	    docker {
-	        image 'maven:3.6-jdk-8'
-	        args '-p 10001:10001'
-	    }
-	}
+	agent any
 	stages {
 		stage('build') {
 			steps {
@@ -15,8 +10,11 @@ pipeline {
 		stage('deploy') {
 		    steps {
 		        echo 'starting deploy the application'
-		        sh 'cd target'
-		        sh 'java -jar pinke_disc-0.0.1-SNAPSHOT.jar'
+		        sh 'jar_pid=`ps -ef | awk '/tomcat/ && !/awk/ {print $2}'`'
+		        sh 'if [ "$jar_pid" != "" ]; then kill -9 $jar_pid; fi'
+		        sh 'cp -f target/pinke_disc-0.0.1-SNAPSHOT.jar /opt/microservices/pinke_disc.jar'
+		        sh 'cd /opt/microservices'
+		        sh 'nohup java -jar pinke_disc-0.0.1-SNAPSHOT.jar >> pinke_disc.log 2>&1 &'
 		    }
 		}
 	}
