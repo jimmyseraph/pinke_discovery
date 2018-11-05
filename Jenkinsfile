@@ -15,6 +15,8 @@ pipeline {
 		        sh 'cp -f target/pinke_disc-0.0.1-SNAPSHOT.jar /opt/microservices/pinke_disc.jar'
 		        sh 'cd /opt/microservices'
 		        sh 'nohup java -jar pinke_disc.jar >> pinke_disc.log 2>&1 &'
+		        sh 'jar_pid=`ps -ef | awk \'/tomcat/ && !/awk/ {print $2}\'`'
+		        sh 'test "$jar_pid" != ""'
 		    }
 		}
 	}
