@@ -10,7 +10,7 @@ pipeline {
 		stage('deploy') {
 		    steps {
 		        echo 'starting deploy the application'
-		        sh 'jar_pid=`ps -ef | awk '/tomcat/ && !/awk/ {print $2}'`'
+		        sh 'jar_pid=`ps -ef | awk \'/tomcat/ && !/awk/ {print $2}\'`'
 		        sh 'if [ "$jar_pid" != "" ]; then kill -9 $jar_pid; fi'
 		        sh 'cp -f target/pinke_disc-0.0.1-SNAPSHOT.jar /opt/microservices/pinke_disc.jar'
 		        sh 'cd /opt/microservices'
